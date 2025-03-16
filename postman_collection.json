@@ -1,0 +1,588 @@
+{
+    "info": {
+        "name": "FF UNMUL - Machine Learning API",
+        "description": "API documentation for the FastAPI application, including camera, user, training, prediction, and logs endpoints.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "version": "1.0.0"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000"
+        },
+        {
+            "key": "api_key",
+            "value": "3wDCQxnOc7EIymWwxNlQwX4Wv8vP9CKy"
+        }
+    ],
+    "item": [
+        {
+            "name": "Camera",
+            "item": [
+                {
+                    "name": "Get Camera URLs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/camera/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "camera"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Camera URLs",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[{\"name\": \"Camera 1\", \"url\": \"http://camera1.example.com\"}, {\"name\": \"Camera 2\", \"url\": \"http://camera2.example.com\"}]"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/camera/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "camera"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "User Management",
+            "item": [
+                {
+                    "name": "Add User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/add_user/{user_name}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user",
+                                "add_user",
+                                "{user_name}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "user_name",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Remove User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/remove_user/{user_name}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user",
+                                "remove_user",
+                                "{user_name}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "user_name",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Image",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/add_image/{user_name}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user",
+                                "add_image",
+                                "{user_name}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "user_name",
+                                    "value": ""
+                                }
+                            ]
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "files",
+                                    "type": "file",
+                                    "src": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Remove Image",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/user/remove_image/{user_name}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "user",
+                                "remove_image",
+                                "{user_name}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "user_name",
+                                    "value": ""
+                                }
+                            ],
+                            "body": {
+                                "mode": "formdata",
+                                "formdata": [
+                                    {
+                                        "key": "file_names",
+                                        "type": "text",
+                                        "value": ""
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Training",
+            "item": [
+                {
+                    "name": "Start Training",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/train/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "train"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Training Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/train/status",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "train",
+                                "status"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Prediction",
+            "item": [
+                {
+                    "name": "Start Prediction",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/predict/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "predict"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Prediction Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/predict/status",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "predict",
+                                "status"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Stop Prediction",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/predict/stop",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "predict",
+                                "stop"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Logs",
+            "item": [
+                {
+                    "name": "List APP Logs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/app/logs",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "app",
+                                "logs"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get APP Log",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/app/logs/{log_file}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "app",
+                                "logs",
+                                "{log_file}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "log_file",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete APP Log",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/app/logs/{log_file}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "app",
+                                "logs",
+                                "{log_file}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "log_file",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "List Inference Logs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/inference/logs",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "inference",
+                                "logs"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Inference Log",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/inference/logs/{log_file}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "inference",
+                                "logs",
+                                "{log_file}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "log_file",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Inference Log",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/inference/logs/{log_file}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "inference",
+                                "logs",
+                                "{log_file}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "log_file",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "List Train Logs",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/train/logs",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "train",
+                                "logs"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Train Log",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/train/logs/{log_file}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "train",
+                                "logs",
+                                "{log_file}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "log_file",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Train Log",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "X-API-KEY",
+                                "value": "{{api_key}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logs/train/logs/{log_file}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logs",
+                                "train",
+                                "logs",
+                                "{log_file}"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "log_file",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
