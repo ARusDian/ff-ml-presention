@@ -469,7 +469,7 @@ def process_camera(camera_id, camera_info):
     def reconnect(attempt=1):
         delay = min(RETRY_DELAY * (2 ** (attempt - 1)), 60)  # Maksimal 60 detik
         logger.info(f"Reconnecting Camera {camera_id} in {delay} seconds...")
-        threading.Timer(delay, process_camera, args=(camera_id, camera_info)).start()s
+        threading.Timer(delay, process_camera, args=(camera_id, camera_info)).start()
 
     while True:
         try:
