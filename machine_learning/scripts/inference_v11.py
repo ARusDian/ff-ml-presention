@@ -21,12 +21,6 @@ import logging
 import contextlib
 import sys
 import base64
-
-# Define the environment variable
-ENV = os.getenv("ENV", "testing")
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-
 from app.utils import save_json, load_json
 from app.loggers.inference_logger import inference_logger as logger
 from machine_learning.config.inference_config import (
@@ -37,7 +31,6 @@ from machine_learning.config.inference_config import (
     KNOWN_FACES_DIR,
     ENGINE_PATH,
     MODEL_PATH,
-    PROCESS_EVERY_N_FRAMES,
     MATCH_THRESHOLD,
     DETECTION_THRESHOLD,
     QUEUE_NAME,
@@ -51,6 +44,11 @@ from machine_learning.config.inference_config import (
     MAX_GROUP_WAIT,
     STALE_SEC,
 )
+
+# Define the environment variable
+ENV = os.getenv("ENV", "testing")
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 
 class Logger:
@@ -311,17 +309,17 @@ def process_frames(camera_index):
                     #     f"Name: {name}, distance: {distances[0][0]}"
                     # )
 
-                    color = (0, 255, 0) if name != "Unknown" else (0, 0, 255)
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                    cv2.putText(
-                        frame,
-                        f"{name} ({distances[0][0]:.2f})",
-                        (x1, y1 - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.9,
-                        color,
-                        2,
-                    )
+                    # color = (0, 255, 0) if name != "Unknown" else (0, 0, 255)
+                    # cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                    # cv2.putText(
+                    #     frame,
+                    #     f"{name} ({distances[0][0]:.2f})",
+                    #     (x1, y1 - 10),
+                    #     cv2.FONT_HERSHEY_SIMPLEX,
+                    #     0.9,
+                    #     color,
+                    #     2,
+                    # )
 
                     # padded_face = frame[y1 - 10 : y2 + 10, x1 - 10 : x2 + 10]
 
@@ -396,15 +394,15 @@ def process_batch_frames(start_index, end_index):
                 f"Detected from camera {cam_id} {len(result.boxes)} objects.",
                 level="info",
             )
-            cv2.putText(
-                frame,
-                f"Detected: {len(result.boxes)} objects",
-                (10, 120),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.9,
-                (0, 255, 0),
-                2,
-            )
+            # cv2.putText(
+            #     frame,
+            #     f"Detected: {len(result.boxes)} objects",
+            #     (10, 120),
+            #     cv2.FONT_HERSHEY_SIMPLEX,
+            #     0.9,
+            #     (0, 255, 0),
+            #     2,
+            # )
 
             for box in result.boxes:
                 if int(box.cls) != 0:
@@ -436,17 +434,17 @@ def process_batch_frames(start_index, end_index):
                     level="info",
                 )
 
-                color = (0, 255, 0) if name != "Unknown" else (0, 0, 255)
-                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                cv2.putText(
-                    frame,
-                    f"{name} ({distances[0][0]:.2f})",
-                    (x1, y1 - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.9,
-                    color,
-                    2,
-                )
+                # color = (0, 255, 0) if name != "Unknown" else (0, 0, 255)
+                # cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                # cv2.putText(
+                #     frame,
+                #     f"{name} ({distances[0][0]:.2f})",
+                #     (x1, y1 - 10),
+                #     cv2.FONT_HERSHEY_SIMPLEX,
+                #     0.9,
+                #     color,
+                #     2,
+                # )
 
         end_time = time.time()
         processing_time = end_time - start_time
@@ -570,13 +568,15 @@ def rotate_per_batch_group():
 
         # Tunggu hingga ada minimal 1 frame dari grup ini
         wait_start = time.time()
-        wait_timeout = 1.5  # detik
         has_fresh_frame = False
-        while time.time() - wait_start < wait_timeout:
+        while time.time() - wait_start < PROCESS_TIMEOUT:
             with ts_lock:
                 now = time.time()
                 for i in range(start, end):
-                    if not frame_queues[i].empty() and (now - last_frame_ts[i]) <= 1.0:
+                    if (
+                        not frame_queues[i].empty()
+                        and (now - last_frame_ts[i]) <= STALE_SEC
+                    ):
                         has_fresh_frame = True
                         break
             if not has_fresh_frame:
@@ -695,33 +695,33 @@ if __name__ == "__main__":
                 except queue.Empty:
                     continue
 
-                cv2.putText(
-                    frame_data["frame"],
-                    f"{camera_list[i]['name']} : Batch {active_group + 1}",
-                    (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.9,
-                    (0, 255, 0),
-                    2,
-                )
+                # cv2.putText(
+                #     frame_data["frame"],
+                #     f"{camera_list[i]['name']} : Batch {active_group + 1}",
+                #     (10, 30),
+                #     cv2.FONT_HERSHEY_SIMPLEX,
+                #     0.9,
+                #     (0, 255, 0),
+                #     2,
+                # )
 
-                frame_time_str = (
-                    frame_data["time"]
-                    .astimezone(pytz.timezone("Asia/Shanghai"))
-                    .strftime("%Y-%m-%d %H:%M:%S")
-                )
+                # frame_time_str = (
+                #     frame_data["time"]
+                #     .astimezone(pytz.timezone("Asia/Shanghai"))
+                #     .strftime("%Y-%m-%d %H:%M:%S")
+                # )
 
-                cv2.putText(
-                    frame_data["frame"],
-                    frame_time_str,
-                    (10, 55),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.9,
-                    (0, 255, 0),
-                    2,
-                )
+                # cv2.putText(
+                #     frame_data["frame"],
+                #     frame_time_str,
+                #     (10, 55),
+                #     cv2.FONT_HERSHEY_SIMPLEX,
+                #     0.9,
+                #     (0, 255, 0),
+                #     2,
+                # )
 
-                cv2.imshow(f'{camera_list[i]["name"]} + {i}', frame_data["frame"])
+                # cv2.imshow(f'{camera_list[i]["name"]} + {i}', frame_data["frame"])
 
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
@@ -731,7 +731,7 @@ if __name__ == "__main__":
             frame_queues[i].put(None)
         for thread in threads:
             thread.join()
-        cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
         rabbitmq_client.close()
         status_data.update({"status": "completed"})
         save_json(PREDICT_STATUS_PATH, {"status": "completed"})

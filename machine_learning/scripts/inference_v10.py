@@ -343,7 +343,7 @@ def process_frames(camera_index):
                     )
 
         end_time = time.time()
-        processing_time = end_time - start_time
+        # processing_time = end_time - start_time
 
         # logger.info(
         #     f'[Camera {camera_list[camera_index]["name"]}] FPS: {fps:.2f} | Processing time: {processing_time:.2f}'
