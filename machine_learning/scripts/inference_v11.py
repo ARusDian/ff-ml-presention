@@ -463,13 +463,24 @@ def process_camera(camera_id, camera_info):
         level="info",
     )
 
+    camera_url = (
+        os.path.join(VIDEO_DIR, camera_info["url"])
+        if ENV == "testing"
+        else camera_info["url"]
+    )
+
+    def reconnect(attempt=1):
+        delay = min(RETRY_DELAY * (2 ** (attempt - 1)), 60)  # Maksimal 60 detik
+        logger.info(f"Reconnecting Camera {camera_id} in {delay} seconds...")
+        threading.Timer(delay, process_camera, args=(camera_id, camera_info)).start()
+
     while True:
         try:
             log_and_print(f"Trying to connect to Camera {camera_id}...")
             start_time_ntp = get_ntp_time()
 
             container = av.open(
-                camera_info["url"],
+                camera_url,
                 options={
                     "rtsp_transport": "tcp",
                     "stimeout": "5000000",
@@ -542,7 +553,8 @@ def process_camera(camera_id, camera_info):
                     container.close()
                     log_and_print(f"Camera {camera_id} stream closed.", level="info")
 
-
+            reconnect() 
+            
 def rotate_per_batch_group():
     global current_group
     total_groups = (num_cameras + CAMERA_GROUP_SIZE - 1) // CAMERA_GROUP_SIZE
