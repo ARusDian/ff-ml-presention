@@ -22,7 +22,7 @@ def update_camera(new_urls: List[Dict[str, str]]):
     try:
         # Save only the relative paths
         for item in new_urls:
-            if "url" in item:
+            if "url" in item and not item["url"].startswith("rtsp://"):
                 item["url"] = os.path.relpath(item["url"], VIDEO_DIR)
         save_json(SOURCE_URLS_PATH, new_urls)
         logger.info(f"Updated camera URLs: {new_urls}")
